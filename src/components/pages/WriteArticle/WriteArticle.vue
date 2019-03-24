@@ -18,7 +18,7 @@
       <div class="publish-btn" @click="publishArticle()">发布文章</div>
     </div>
     <div id='my-editormd' class="markdown-wrapper">
-      <textarea id='my-editormd-markdown-doc' name='my-editormd-markdown-doc' ></textarea>
+      <textarea id='my-editormd-markdown-doc' name='my-editormd-markdown-doc' ref="markdownText">123</textarea>
       <textarea id='my-editormd-html-code' name='my-editormd-html-code' ref="markdownContent"></textarea>
     </div>
     <el-dialog
@@ -28,7 +28,7 @@
       <form>
         <el-form :model="articleInfoForm" :rules="rules" ref="articleInfoForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="文章作者" prop="author">
-            <el-input  placeholder="作者" v-model="articleInfoForm.author" size="mini" class="author-input" maxlength="30"></el-input>
+            <el-input  placeholder="作者" v-model="articleInfoForm.author" size="mini" class="author-input" maxlength="30" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="文章类型" prop="articleType">
             <el-select v-model="articleInfoForm.articleType" size="mini" placeholder="请选择" class="type-select">
@@ -43,7 +43,7 @@
           <el-form-item label="选择标签" prop="checkedTags">
             <el-checkbox-group
               v-model="articleInfoForm.checkedTags">
-              <el-checkbox v-for="tag in tags" :label="tag" :key="tag">{{tag}}</el-checkbox>
+              <el-checkbox v-for="tag in tags" :label="tag" :key="tag.label">{{tag.label}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-form>
@@ -58,18 +58,21 @@
 
 <script>
 import qs from 'qs'
+import utils from '@/utils/utils'
+import { mapState } from 'vuex'
 export default {
   name: 'write-article',
   data () {
     return {
       articleTitle: '',
       markdownObj: null,
+      intervalId: null,
       dialogVisible: false,
       articleTypeList: [{type: '原创'}, {type: '转载'}],
-      tags: ['Java', 'JavaScript', 'VUE', 'REACT', 'Spring', 'Database'],
+      getCurrentUserUrl: '/blog/getCurrentUser',
       articleInfoForm: {
         checkedTags: [],
-        author: 'remango',
+        author: '',
         articleType: ''
       },
       rules: {
@@ -86,10 +89,28 @@ export default {
       publishArticleUrl: '/blog/publishArticle'
     }
   },
+  computed: {
+    ...mapState({
+      'tags': 'tags'
+    })
+  },
   mounted () {
+    this.loadCache()
     this.initMarkdown()
+    this.articleCache()
+  },
+  beforeDestroy () {
+    clearInterval(this.intervalId)
   },
   methods: {
+    loadCache () {
+      this.$refs.markdownText.innerText = utils.fetchData('remango-blog')
+    },
+    articleCache () {
+      this.intervalId = setInterval(() => {
+        utils.saveData('remango-blog', this.$refs.markdownText.innerText)
+      }, 5000)
+    },
     initMarkdown () {
       if (editormd) {
         console.log('123')
@@ -120,16 +141,29 @@ export default {
       })
     },
     publishArticle () {
-      if (!this.$refs.markdownContent.innerText || !this.articleTitle) {
-        this.$alert('请填写标题或文章内容', '提示', {
-          confirmButtonText: '确定',
-          type: 'warning',
-          callback: action => {
-          }
-        })
-        return
-      }
-      this.dialogVisible = true
+      this.axios.get(this.getCurrentUserUrl).then(response => {
+        if (!response.data.data) {
+          this.$alert('只有登录才能发文章哦！', '提示', {
+            confirmButtonText: '确定',
+            type: 'warning',
+            callback: action => {
+            }
+          })
+          return
+        }
+        this.articleInfoForm.author = response.data.data
+        if (!this.$refs.markdownContent.innerText || !this.articleTitle) {
+          this.$alert('请填写标题或文章内容', '提示', {
+            confirmButtonText: '确定',
+            type: 'warning',
+            callback: action => {
+            }
+          })
+        } else this.dialogVisible = true
+        console.log(response.data.data)
+      }).catch(error => {
+        console.log(error)
+      })
     },
     finishedPublishArticle (formName) {
       let summary = this.getSummary(this.markdownObj.getHTML())
@@ -148,7 +182,19 @@ export default {
         if (valid) {
           this.axios.post(this.publishArticleUrl, qs.stringify(ArticleData),
             {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(response => {
-            console.log('cg')
+            // 重置表单
+            this.articleTitle = ''
+            this.resetForm('articleInfoForm')
+            this.$refs.markdownText.innerText = ''
+            utils.saveData('remango-blog', '')
+            this.dialogVisible = false
+            this.$alert('已发布，前往首页！', '提示', {
+              confirmButtonText: '确定',
+              type: 'success',
+              callback: action => {
+                this.$router.push({name: 'index'})
+              }
+            })
           }).catch(error => {
             console.log(error)
           })
@@ -159,7 +205,6 @@ export default {
       })
     },
     resetForm (formName) {
-      console.log(1)
       this.$refs[formName].resetFields()
     },
     toLoginPage () {
@@ -175,7 +220,7 @@ export default {
 
         html = html.substring(endIndex + 1)
         beginIndex = html.indexOf('<')
-        if (summary.length < 90) {
+        if (summary.length < 100) {
           // 过滤掉<pre>标签中的代码块
           if (html.length > 4) {
             if (html.charAt(beginIndex) === '<' && html.charAt(beginIndex + 1) === 'p' && html.charAt(beginIndex + 2) === 'r' && html.charAt(beginIndex + 3) === 'e') {

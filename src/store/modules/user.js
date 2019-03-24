@@ -19,8 +19,8 @@ const user = {
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
           if (response.data.errorCode === 0) {
-            setToken('yes')
-            commit('SET_TOKEN', 'yes')
+            setToken(username)
+            commit('SET_TOKEN', username)
           }
           resolve(response)
         }).catch(error => {

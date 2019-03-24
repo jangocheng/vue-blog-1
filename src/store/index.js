@@ -9,7 +9,15 @@ import user from './modules/user'
 Vue.use(Vuex)
 
 const state = {
-
+  tags: [
+    {label: 'Java', icon: 'icon-java'},
+    {label: 'JavaScript', icon: 'icon-logo-javascript'},
+    {label: 'VUE', icon: 'icon-bxl-vuejs'},
+    {label: 'REACT', icon: 'icon-react'},
+    {label: 'Database', icon: 'icon-data-base'},
+    {label: 'Server', icon: 'icon-shujuku'},
+    {label: 'Others', icon: 'icon-qita'}
+  ]
 }
 
 export default new Vuex.Store({

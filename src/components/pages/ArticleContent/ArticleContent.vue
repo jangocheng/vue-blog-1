@@ -15,13 +15,13 @@
           </div>
           <ul class="header-list">
             <li class="header-item clearfix">
-              <a class="nav-link">首页</a>
+              <router-link :to="{ name: 'index'}" class="nav-link"><i class="icon iconfont icon-home1"></i>首页</router-link>
             </li>
             <li class="header-item clearfix">
-              <a  class="nav-link">热点</a>
+              <a class="nav-link"><i class="icon iconfont icon-redu"></i>热点</a>
             </li>
             <li class="header-item clearfix">
-              <a class="nav-link">时间轴</a>
+              <router-link :to="{ name: 'timeLine'}" class="nav-link">时间轴</router-link>
             </li>
           </ul>
         </div>
@@ -30,7 +30,7 @@
     <div class="main-container">
       <div class="article-wrapper">
         <div class="article-title">
-          这是一个标题
+          {{articleTitle}}
         </div>
         <div class="blog-info">
           <span class="blog-info-item"><i class="icon iconfont icon-yonghutouxiang"></i> {{author}}
@@ -50,12 +50,29 @@
           <textarea style="display:none;" name="editormd-markdown-doc" id="mdText"></textarea>
         </div>
         </div>
+        <div class="article-turn">
+          <div class="pre-turn">
+            <a class="turn-link" @click="toTargetPage(prePage.articleId, prePage.author)">
+              <i class="el-icon-arrow-left pre-icon"></i>
+              <span v-if="prePage.articleId" class="turn-text">{{prePage.articleTitle}}</span>
+              <span v-else>已到最前</span>
+            </a>
+          </div>
+          <div class="next-turn">
+            <a class="turn-link" @click="toTargetPage(nextPage.articleId, nextPage.author)">
+              <span v-if="nextPage.articleId" class="turn-text">{{nextPage.articleTitle}}</span>
+              <span v-else>已到最后</span>
+              <i class="el-icon-arrow-right next-icon"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {getFormatDate} from '@/utils/formatData'
 export default {
   name: 'article-content',
   data () {
@@ -65,15 +82,25 @@ export default {
       author: '',
       categories: '',
       visits: 0,
-      queryArticleByIdAuthorUrl: '/blog/queryArticleByIdAuthor'
+      prePage: {
+        articleTitle: '',
+        articleId: null,
+        author: null
+      },
+      nextPage: {
+        articleTitle: '',
+        articleId: null,
+        author: null
+      },
+      queryArticleByIdAuthorUrl: '/blog/queryArticleByIdAuthor',
+      queryArticleInfoByIdUrl: '/blog/queryArticleInfoById'
     }
   },
   mounted () {
-    this.initArticleCont()
+    this.loadArticleContent(this.getArticleParamObj())
   },
   methods: {
-    initArticleCont () {
-      let params = this.getArticleParamObj()
+    loadArticleContent (params) {
       this.axios.get(this.queryArticleByIdAuthorUrl, {
         params: params
       }).then(response => {
@@ -82,7 +109,9 @@ export default {
         this.publishTime = this.getFormatDate(response.data.data.createTime)
         this.categories = this.getCategoriesList(response.data.data.categories)
         this.visits = response.data.data.visits
-        $('#mdText').text(response.data.data.content)
+        this.queryPreNext(response.data.data.lastArticleId, response.data.data.nextArticleId)
+        $('#wordsView').empty().append('<textarea style="display:none;" name="editormd-markdown-doc" id="mdText"></textarea>')
+        $('#mdText').text('').text(response.data.data.content)
         editormd.markdownToHTML('wordsView', {
           htmlDecode: 'true', // you can filter tags decode
           emoji: true,
@@ -95,6 +124,44 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    },
+    toTargetPage (articleId, author) {
+      if (articleId && author) {
+        this.loadArticleContent({articleId: articleId, author: author})
+        this.$router.replace({name: 'articleContent', query: { articleId: articleId, author: author }})
+      }
+    },
+    queryPreNext (PreId, nextId) {
+      if (PreId) {
+        this.axios.get(this.queryArticleInfoByIdUrl, {
+          params: {id: PreId}
+        }).then(response => {
+          this.prePage.articleTitle = response.data.data.articleTitle
+          this.prePage.articleId = response.data.data.articleId
+          this.prePage.author = response.data.data.author
+        }).catch(error => {
+          console.log(error)
+        })
+      } else {
+        this.prePage.articleTitle = ''
+        this.prePage.articleId = null
+        this.prePage.author = null
+      }
+      if (nextId) {
+        this.axios.get(this.queryArticleInfoByIdUrl, {
+          params: {id: nextId}
+        }).then(response => {
+          this.nextPage.articleTitle = response.data.data.articleTitle
+          this.nextPage.articleId = response.data.data.articleId
+          this.nextPage.author = response.data.data.author
+        }).catch(error => {
+          console.log(error)
+        })
+      } else {
+        this.nextPage.articleTitle = ''
+        this.nextPage.articleId = null
+        this.nextPage.author = null
+      }
     },
     getArticleParamObj () {
       let paramObj = {}
@@ -118,15 +185,7 @@ export default {
       return Categories.split(',').join(' ')
     },
     getFormatDate (time) {
-      let date = new Date(time)
-      let yyyy = date.getFullYear()
-      let moth = date.getMonth() + 1
-      let MM = moth >= 10 ? moth : '0' + moth
-      let dd = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
-      let HH = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
-      let mm = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
-      let ss = date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
-      return `${yyyy}-${MM}-${dd}  ${HH}:${mm}:${ss}`
+      return getFormatDate(time)
     }
   }
 }
@@ -135,6 +194,7 @@ export default {
 <style scoped lang="less">
   .article-wrapper{
     margin-top: 40px;
+    margin-bottom: 70px;
     .article-title{
       font-size: 32px;
       text-align: left;
@@ -155,6 +215,49 @@ export default {
     }
     .article-content{
       padding: 10px 0;
+    }
+    .article-turn{
+      margin: 20px 0;
+      display: flex;
+      height: 40px;
+      line-height: 40px;
+      overflow: hidden;
+      position: relative;
+      .pre-turn{
+        flex: 1;
+        flex-basis: 50%;
+        padding-right: 15px;
+        padding-left: 20px;
+      }
+      .next-turn{
+        text-align: right;
+        padding-left: 15px;
+        padding-right: 20px;
+        flex: 1;
+        flex-basis: 50%;
+      }
+      .turn-link{
+        font-size: 16px;
+        color: #666;
+        &:hover {
+          color: #e2291b;
+        }
+        .next-icon{
+          position: absolute;
+          top: 50%;
+          right: 0;
+          transform: translateY(-50%);
+        }
+        .pre-icon{
+          position: absolute;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+        }
+        .turn-text{
+          text-overflow:ellipsis;
+        }
+      }
     }
   }
 </style>

@@ -2,7 +2,7 @@ import axios from '@/utils/request'
 import qs from 'qs'
 
 export function getInfo () {
-  return axios.post('/blog/getCurrentUser', {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+  return axios.get('/blog/getCurrentUser')
 }
 
 export function login (username, password) {
@@ -11,7 +11,7 @@ export function login (username, password) {
 
 export function logout () {
   return axios({
-    url: '/app-update-server/logout',
+    url: '/blog/logout',
     method: 'post'
   })
 }

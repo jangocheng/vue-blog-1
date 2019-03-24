@@ -120,6 +120,7 @@ export default {
               this.$router.push({name: 'index'})
             }
           }).catch(error => {
+            this.refreshImg()
             if (error.data) this.$message.error(error.data.errorMsg)
           })
         }

@@ -11,7 +11,7 @@
         </div>
         <div class="main-container">
           <div class="write-btn-wrapper">
-            <a class="write-btn" @click="toWriteArticlePage()">写博客</a>
+            <router-link :to="{ name: 'writeArticle'}" class="write-btn">写博客</router-link>
           </div>
           <ul class="header-list">
             <li class="header-item clearfix">
@@ -21,7 +21,7 @@
               <a class="nav-link"><i class="icon iconfont icon-redu"></i>热点</a>
             </li>
             <li class="header-item clearfix">
-              <a class="nav-link">时间轴</a>
+              <router-link :to="{ name: 'timeLine'}" class="nav-link" ><i class="icon iconfont icon-shijian2"></i>时间轴</router-link>
             </li>
             <li class="header-item clearfix">
               <el-input
@@ -46,8 +46,8 @@
         <canvas id="canvas" class="canvas" height="200" width="960"></canvas>
       </div>
       <div class="blog-container">
-        <div class="blog-content-wrapper">
-          <ul class="blog-list">
+        <div class="blog-content-wrapper" >
+          <ul class="blog-list" v-if="articlesList.length > 0">
             <li class="blog-item" v-for="article in articlesList" :key="article.id">
               <a class="blog-title" @click="toArticleContentPage(article.articleId, article.author)">{{article.articleTitle}}</a>
               <div class="blog-info">
@@ -65,9 +65,29 @@
               </p>
             </li>
           </ul>
+          <div v-else>抱歉，未检索到任何结果...</div>
         </div>
         <div class="blog-sidebar-wrapper">
-          456
+          <el-card class="box-card" shadow="never">
+            <div slot="header" class="clearfix">
+              <span>常用标签</span>
+            </div>
+            <div class="sidebar-tags">
+              <ul class="tags-list">
+                <li class="tags-item" v-for="item in tags" :key="item.label">
+                  <div class="tags-link-wrapper"><a class="tags-link" @click="getArticle(item.label)"><i class="icon iconfont" :class="item.icon"></i><span>{{item.label}}</span></a></div>
+                </li>
+              </ul>
+            </div>
+          </el-card>
+          <el-card class="box-card" shadow="never">
+            <div slot="header" class="clearfix">
+              <span>今日份鸡汤</span>
+            </div>
+            <div class="quote">
+              {{getQuotes}}
+            </div>
+          </el-card>
         </div>
       </div>
       <div class="blog-pagination">
@@ -81,13 +101,21 @@
         </el-pagination>
       </div>
     </div>
+    <blogFooter/>
   </div>
 </template>
 
 <script>
 import canvas from '@/common/js/rain'
+import {getFormatDate} from '@/utils/formatData'
+import {getQuotes} from '@/utils/quotes'
+import blogFooter from './pages/BlogFooter/BlogFooter'
+import { mapState } from 'vuex'
 export default {
   name: 'index',
+  components: {
+    blogFooter
+  },
   data () {
     return {
       pagination: {
@@ -101,6 +129,12 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      'tags': 'tags'
+    }),
+    getQuotes () {
+      return getQuotes()
+    }
   },
   mounted () {
     canvas()
@@ -111,10 +145,10 @@ export default {
       console.log(123)
       this.getArticle()
     },
-    getArticle () {
+    getArticle (key = this.articleData) {
       let offset = (this.pagination.currentPage - 1) * this.pagination.pageSize + 1
       let params = {
-        key: this.articleData,
+        key: key,
         offset: offset,
         limit: this.pagination.pageSize
       }
@@ -133,9 +167,6 @@ export default {
     toLoginPage () {
       this.$router.push({name: 'login'})
     },
-    toWriteArticlePage () {
-      this.$router.push({name: 'writeArticle'})
-    },
     handleSizeChange (val) {
       this.pagination.pageSize = val
       this.getArticle()
@@ -145,18 +176,10 @@ export default {
       this.getArticle()
     },
     getCategoriesList (Categories) {
-      return Categories.split(',').join(' ')
+      return Categories.split(',').join('   ')
     },
     getFormatDate (time) {
-      let date = new Date(time)
-      let yyyy = date.getFullYear()
-      let moth = date.getMonth() + 1
-      let MM = moth >= 10 ? moth : '0' + moth
-      let dd = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate()
-      let HH = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()
-      let mm = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()
-      let ss = date.getSeconds() >= 10 ? date.getSeconds() : '0' + date.getSeconds()
-      return `${yyyy}-${MM}-${dd}  ${HH}:${mm}:${ss}`
+      return getFormatDate(time)
     }
   }
 }
@@ -170,11 +193,12 @@ export default {
     margin-top: 30px;
     .blog-content-wrapper{
       flex: 1;
+      width: 65%;
       flex-basis: 65%;
       position: relative;
-      border-top: 1px dashed @border-color;
-      border-bottom: 1px dashed @border-color;
       .blog-list{
+        border-top: 1px dashed @border-color;
+        border-bottom: 1px dashed @border-color;
         .blog-item{
           padding: 20px 0 15px;
           &:not(:last-child) {
@@ -211,8 +235,16 @@ export default {
     }
     .blog-sidebar-wrapper{
       flex: 1;
+      width: 30%;
       flex-basis: 30%;
       margin-left: 6%;
+      .box-card{
+        margin-bottom: 30px;
+      }
+      .quote{
+        text-indent: 2em;
+        line-height: 1.6;
+      }
     }
   }
   .canvas-wrapper{
@@ -245,5 +277,28 @@ export default {
   }
   .blog-pagination{
     margin: 40px 0;
+  }
+  .sidebar-tags{
+    .tags-list{
+      display: flex;
+      flex-wrap: wrap;
+      .tags-item{
+        width: 50%;
+        flex-basis: 50%;
+        height: 32px;
+        line-height: 32px;
+        .tags-link-wrapper{
+          .tags-link{
+            &:hover{
+              color: #00c0ff;
+            }
+            .iconfont{
+              display: inline-block;
+              margin-right: 3px;
+            }
+          }
+        }
+      }
+    }
   }
 </style>

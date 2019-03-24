@@ -6,6 +6,7 @@ import index from '../components/index'
 import writeArticle from '../components/pages/WriteArticle/WriteArticle'
 import login from '../components/pages/Login/Login'
 import articleContent from '../components/pages/ArticleContent/ArticleContent'
+import timeLine from '../components/pages/TimeLine/TimeLine'
 
 Vue.use(Router)
 export const constantRouterMap = [
@@ -33,6 +34,11 @@ export const constantRouterMap = [
     path: '/articleContent',
     name: 'articleContent',
     component: articleContent
+  },
+  {
+    path: '/timeLine',
+    name: 'timeLine',
+    component: timeLine
   }
 ]
 export const asyncRouterMap = [
