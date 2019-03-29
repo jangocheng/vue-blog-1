@@ -15,7 +15,7 @@ const state = {
     {label: 'VUE', icon: 'icon-bxl-vuejs'},
     {label: 'REACT', icon: 'icon-react'},
     {label: 'Database', icon: 'icon-data-base'},
-    {label: 'Server', icon: 'icon-shujuku'},
+    {label: 'Server', icon: 'icon-fuwuqi'},
     {label: 'Others', icon: 'icon-qita'}
   ]
 }

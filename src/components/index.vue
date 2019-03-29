@@ -1,42 +1,6 @@
 <template>
   <div>
-    <nav class="nav nav-top">
-      <div class="nav-header">
-        <div class="logo-wrapper clearfix">
-          <router-link :to="{ name: 'index'}" class="logo">博客</router-link>
-        </div>
-        <div class="login-register-wrapper">
-          <el-button size="medium" class="nav-btn" @click="toLoginPage()">登录</el-button>
-          <el-button size="medium" class="nav-btn">注册</el-button>
-        </div>
-        <div class="main-container">
-          <div class="write-btn-wrapper">
-            <router-link :to="{ name: 'writeArticle'}" class="write-btn">写博客</router-link>
-          </div>
-          <ul class="header-list">
-            <li class="header-item clearfix">
-              <a class="nav-link"><i class="icon iconfont icon-home1"></i>首页</a>
-            </li>
-            <li class="header-item clearfix">
-              <a class="nav-link"><i class="icon iconfont icon-redu"></i>热点</a>
-            </li>
-            <li class="header-item clearfix">
-              <router-link :to="{ name: 'timeLine'}" class="nav-link" ><i class="icon iconfont icon-shijian2"></i>时间轴</router-link>
-            </li>
-            <li class="header-item clearfix">
-              <el-input
-                size="mini"
-                placeholder="请输入搜索内容"
-                suffix-icon="el-icon-search"
-                v-model="articleData"
-                @keyup.enter.native="searchArticlesByKey"
-                class= "search-input">
-              </el-input>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <blog-header @searchArticlesByKey="searchArticlesByKey" />
     <div class="main-container">
       <div class="canvas-wrapper">
         <div class="joke">
@@ -65,7 +29,7 @@
               </p>
             </li>
           </ul>
-          <div v-else>抱歉，未检索到任何结果...</div>
+          <div v-else>{{searchMsg}}</div>
         </div>
         <div class="blog-sidebar-wrapper">
           <el-card class="box-card" shadow="never">
@@ -101,30 +65,60 @@
         </el-pagination>
       </div>
     </div>
-    <blogFooter/>
+    <div class="sidebar-container" :class="{'open': isOpenMenu}">
+      <div class="sidebar-shadow" @click="closeMenu">
+      </div>
+      <div class="sidebar-content">
+        <div class="nav-title">
+          个人空间
+        </div>
+        <div class="sidebar-menu-wrapper">
+          <ul class="sidebar-menu">
+            <li class="sidebar-item" v-for="(navItem) in navList" :key="navItem.id">
+              <a class="sidebar-item-content" @click="operate(navItem.id)">
+                <i class="icon iconfont" :class="navItem.icon"></i>
+                <span>{{navItem.label}}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <message-board :isOpenBoard='isOpenBoard' @closeBoard="closeBoard"></message-board>
+    <blog-footer @openMenu="openMenu"/>
   </div>
 </template>
 
 <script>
 import canvas from '@/common/js/rain'
 import {getFormatDate} from '@/utils/formatData'
-import {getQuotes} from '@/utils/quotes'
+import {getQuotes} from '@/utils/randomGenerate'
 import blogFooter from './pages/BlogFooter/BlogFooter'
+import blogHeader from './pages/BlogHeader/BlogHeader'
+import messageBoard from './pages/MessageBoard/MessageBoard'
 import { mapState } from 'vuex'
 export default {
   name: 'index',
   components: {
-    blogFooter
+    blogFooter, blogHeader, messageBoard
   },
   data () {
     return {
       pagination: {
         currentPage: 1,
         pageSize: 10,
-        total: 100
+        total: 0
       },
-      articleData: '',
+      isOpenMenu: false,
+      searchMsg: '',
+      articleSearchKey: '',
+      isOpenBoard: false,
       articlesList: [],
+      navList: [
+        { label: '我的音乐', icon: 'icon-yinle', id: 1 },
+        { label: '留言板', icon: 'icon-liuyan1', id: 2 },
+        { label: '关于我', icon: 'icon-guanyuwomen', id: 3 }
+      ],
       articlesUrl: '/blog/queryArticles'
     }
   },
@@ -141,11 +135,20 @@ export default {
     this.getArticle()
   },
   methods: {
-    searchArticlesByKey () {
-      console.log(123)
-      this.getArticle()
+    closeBoard () {
+      this.isOpenBoard = false
     },
-    getArticle (key = this.articleData) {
+    operate (id) {
+      if (id === 2) {
+        this.isOpenMenu = false
+        this.isOpenBoard = true
+      }
+    },
+    searchArticlesByKey (articleData) {
+      this.articleSearchKey = articleData
+      this.getArticle(articleData)
+    },
+    getArticle (key = this.articleSearchKey) {
       let offset = (this.pagination.currentPage - 1) * this.pagination.pageSize + 1
       let params = {
         key: key,
@@ -157,6 +160,7 @@ export default {
       }).then(response => {
         this.pagination.total = response.data.data.total
         this.articlesList = response.data.data.rows
+        if (this.articlesList.length > 0) this.searchMsg = '抱歉，未检索到任何结果...'
       }).catch(error => {
         console.log(error)
       })
@@ -180,6 +184,12 @@ export default {
     },
     getFormatDate (time) {
       return getFormatDate(time)
+    },
+    openMenu () {
+      this.isOpenMenu = true
+    },
+    closeMenu () {
+      this.isOpenMenu = false
     }
   }
 }
@@ -264,7 +274,7 @@ export default {
       position: absolute;
       bottom: 20px;
       right: 220px;
-      z-index: 100;
+      z-index: 9;
     }
     .title{
       position: absolute;
@@ -296,6 +306,101 @@ export default {
               display: inline-block;
               margin-right: 3px;
             }
+          }
+        }
+      }
+    }
+  }
+  .sidebar {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+  }
+  .sidebar-shadow{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.6);
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    visibility: hidden;
+    opacity: 1;
+    transition: .3s;
+    -webkit-transition: .3s;
+  }
+  .open .sidebar-shadow{
+    opacity: 1;
+    visibility: visible;
+  }
+  .open .sidebar-content{
+    opacity: 1;
+    width: 284px;
+  }
+  .sidebar-content {
+    top: 0;
+    right: 0;
+    height: 100%;
+    position: fixed;
+    background-color: #fff;
+    z-index: 101;
+    opacity: 0;
+    width: 0;
+    transition: .3s;
+    -webkit-transition: .3s;
+    .nav-title{
+      padding: 25px 30px 15px;
+      text-align: center;
+      letter-spacing: .2em;
+      font-size: 20px;
+      font-weight: 600;
+      color:#666;
+    }
+  }
+  .sidebar-menu-wrapper{
+    margin-top: 10px;
+    .sidebar-menu{
+      .sidebar-item{
+        .sidebar-item-content{
+          padding: 0 30px;
+          font-size: 16px;
+          display: flex;
+          color:#333;
+          position:relative;
+          transition: color .3s ease-in-out;
+          &:before{
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: #f66f45;
+            z-index: 2;
+            transition: width .3s ease-in-out;
+            -webkit-transition: width .3s ease-in-out;
+          }
+          &:hover{
+            color: #fff;
+            &:before{
+              width: 100%;
+            }
+          }
+          .iconfont{
+            display: inline-block;
+            position: relative;
+            z-index: 3;
+            padding: 0 10px 0 1px;
+            line-height: 60px;
+            font-size: 20px;
+          }
+          span{
+            display: inline-block;
+            font-weight: normal;
+            position: relative;
+            line-height: 60px;
+            height: 60px;
+            z-index: 3;
           }
         }
       }

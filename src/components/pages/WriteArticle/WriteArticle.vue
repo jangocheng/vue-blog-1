@@ -43,7 +43,7 @@
           <el-form-item label="选择标签" prop="checkedTags">
             <el-checkbox-group
               v-model="articleInfoForm.checkedTags">
-              <el-checkbox v-for="tag in tags" :label="tag" :key="tag.label">{{tag.label}}</el-checkbox>
+              <el-checkbox v-for="tag in tags" :label="tag.label" :key="tag.label">{{tag.label}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-form>
@@ -130,7 +130,7 @@ export default {
         htmlDecode: true, // 不过滤标签
         imageUpload: true, // 上传图片
         imageFormats: ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp', 'JPG', 'JPEG', 'GIF', 'PNG', 'BMP', 'WEBP'],
-        imageUploadURL: '/uploadImage',
+        imageUploadURL: '/blog/uploadImage',
         onload: function () {
           // console.log('onload', this);
         },
@@ -141,7 +141,7 @@ export default {
       })
     },
     publishArticle () {
-      this.axios.get(this.getCurrentUserUrl).then(response => {
+      this.$store.dispatch('GetInfo').then(response => {
         if (!response.data.data) {
           this.$alert('只有登录才能发文章哦！', '提示', {
             confirmButtonText: '确定',
@@ -151,7 +151,7 @@ export default {
           })
           return
         }
-        this.articleInfoForm.author = response.data.data
+        this.articleInfoForm.author = response.data.data.username
         if (!this.$refs.markdownContent.innerText || !this.articleTitle) {
           this.$alert('请填写标题或文章内容', '提示', {
             confirmButtonText: '确定',

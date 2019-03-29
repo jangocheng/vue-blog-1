@@ -58,6 +58,7 @@
 
 <script>
 import qs from 'qs'
+import {sha256} from 'js-sha256'
 export default {
   name: 'login',
   data () {
@@ -112,19 +113,23 @@ export default {
     loginSystem (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$store.dispatch('Login', this.loginForm).then(res => {
-            console.log(res.data.errorMsg, 12)
-            if (res.data.errorCode !== 0) {
-              this.$message.error(res.data.errorMsg)
-            } else {
-              this.$router.push({name: 'index'})
-            }
+          this.loginForm.password = sha256(this.loginForm.password + this.loginForm.username)
+          this.VerifyAndSetCookie(this.loginForm).then(res => {
           }).catch(error => {
             this.refreshImg()
             if (error.data) this.$message.error(error.data.errorMsg)
           })
         }
       })
+    },
+    async VerifyAndSetCookie (loginForm) {
+      let res = await this.$store.dispatch('Login', loginForm)
+      if (res.data.errorCode !== 0) {
+        this.$message.error(res.data.errorMsg)
+      } else {
+        await this.$store.dispatch('GetInfo')
+        this.$router.push({name: 'index'})
+      }
     }
   }
 }

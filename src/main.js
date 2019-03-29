@@ -10,8 +10,11 @@ import store from './store/index'
 import 'font-awesome/css/font-awesome.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/permission'
+import infiniteScroll from 'vue-infinite-scroll'
 
 Vue.prototype.axios = axios
+
+Vue.use(infiniteScroll)
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false

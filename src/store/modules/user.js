@@ -1,5 +1,6 @@
 import { login, getInfo, logout } from '@/api/getUserInfo'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { setAvatar, removeAvatar } from '@/utils/avatar'
 const user = {
   state: {
     token: getToken()
@@ -32,6 +33,12 @@ const user = {
     GetInfo () {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
+          if (response.data.data) {
+            setAvatar(response.data.data.avatarUrl)
+          } else {
+            removeAvatar()
+            removeToken()
+          }
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -44,6 +51,7 @@ const user = {
         logout().then(response => {
           if (response.data.errorCode === 0) {
             commit('SET_TOKEN', '')
+            removeAvatar()
             removeToken()
           }
           resolve(response)
@@ -56,6 +64,7 @@ const user = {
     FedLogOut ({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
+        removeAvatar()
         removeToken()
         resolve()
       })

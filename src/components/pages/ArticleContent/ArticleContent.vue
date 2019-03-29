@@ -1,32 +1,6 @@
 <template>
   <div>
-    <nav class="nav nav-top">
-      <div class="nav-header">
-        <div class="logo-wrapper clearfix">
-          <router-link :to="{ name: 'index'}" class="logo">博客</router-link>
-        </div>
-        <div class="login-register-wrapper">
-          <el-button size="medium" class="nav-btn" @click="toLoginPage()">登录</el-button>
-          <el-button size="medium" class="nav-btn">注册</el-button>
-        </div>
-        <div class="main-container">
-          <div class="write-btn-wrapper">
-            <a class="write-btn" @click="toWriteArticlePage()">写博客</a>
-          </div>
-          <ul class="header-list">
-            <li class="header-item clearfix">
-              <router-link :to="{ name: 'index'}" class="nav-link"><i class="icon iconfont icon-home1"></i>首页</router-link>
-            </li>
-            <li class="header-item clearfix">
-              <a class="nav-link"><i class="icon iconfont icon-redu"></i>热点</a>
-            </li>
-            <li class="header-item clearfix">
-              <router-link :to="{ name: 'timeLine'}" class="nav-link">时间轴</router-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <blog-header/>
     <div class="main-container">
       <div class="article-wrapper">
         <div class="article-title">
@@ -73,8 +47,12 @@
 
 <script>
 import {getFormatDate} from '@/utils/formatData'
+import blogHeader from '../../pages/BlogHeader/BlogHeader'
 export default {
   name: 'article-content',
+  components: {
+    blogHeader
+  },
   data () {
     return {
       articleTitle: '',
@@ -174,12 +152,6 @@ export default {
         paramObj[label] = value
       })
       return paramObj
-    },
-    toLoginPage () {
-      this.$router.push({name: 'login'})
-    },
-    toWriteArticlePage () {
-      this.$router.push({name: 'writeArticle'})
     },
     getCategoriesList (Categories) {
       return Categories.split(',').join(' ')

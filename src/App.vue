@@ -16,4 +16,5 @@ export default {
   @import './common/css/iconfont.css';
   @import './common/css/global';
   @import './common/css/theme';
+  @import './common/css/loading';
 </style>

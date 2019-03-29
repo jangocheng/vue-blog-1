@@ -16,6 +16,7 @@ router.beforeEach((to, from, next) => {
       } else {
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
           if (res.data.errorCode === 0) {
+            console.log(123, res)
             next()
           } else {
             next('/login')

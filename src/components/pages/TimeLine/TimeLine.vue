@@ -1,32 +1,6 @@
 <template>
   <div>
-    <nav class="nav nav-top">
-      <div class="nav-header">
-        <div class="logo-wrapper clearfix">
-          <router-link :to="{ name: 'index'}" class="logo">博客</router-link>
-        </div>
-        <div class="login-register-wrapper">
-          <el-button size="medium" class="nav-btn" @click="toLoginPage()">登录</el-button>
-          <el-button size="medium" class="nav-btn">注册</el-button>
-        </div>
-        <div class="main-container">
-          <div class="write-btn-wrapper">
-            <router-link :to="{ name: 'writeArticle'}" class="write-btn">写博客</router-link>
-          </div>
-          <ul class="header-list">
-            <li class="header-item clearfix">
-              <router-link :to="{ name: 'index'}" class="nav-link"><i class="icon iconfont icon-home1"></i>首页</router-link>
-            </li>
-            <li class="header-item clearfix">
-              <a class="nav-link"><i class="icon iconfont icon-redu"></i>热点</a>
-            </li>
-            <li class="header-item clearfix">
-              <router-link :to="{ name: 'timeLine'}" class="nav-link item-active">时间轴</router-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <blog-header/>
     <div class="main-container time-line-container">
       <div class="time-line-content">
         <div class="time-line-tags">
@@ -69,8 +43,12 @@
 
 <script>
 import {getFormatDateSimple} from '@/utils/formatData'
+import blogHeader from '../../pages/BlogHeader/BlogHeader'
 export default {
   name: 'timeline',
+  components: {
+    blogHeader
+  },
   data () {
     return {
       getTimeLineUrl: '/blog/getTimeline',
@@ -144,9 +122,6 @@ export default {
       }).catch(error => {
         console.log(error)
       })
-    },
-    toLoginPage () {
-      this.$router.push({name: 'login'})
     },
     loadMoreTimeLine () {
       this.timeLineCurrentPage += 1
