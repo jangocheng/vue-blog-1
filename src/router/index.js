@@ -7,6 +7,7 @@ import writeArticle from '../components/pages/WriteArticle/WriteArticle'
 import login from '../components/pages/Login/Login'
 import articleContent from '../components/pages/ArticleContent/ArticleContent'
 import timeLine from '../components/pages/TimeLine/TimeLine'
+import hotSpot from '../components/pages/HotSpot/HotSpot'
 
 Vue.use(Router)
 export const constantRouterMap = [
@@ -39,6 +40,11 @@ export const constantRouterMap = [
     path: '/timeLine',
     name: 'timeLine',
     component: timeLine
+  },
+  {
+    path: '/hotSpot',
+    name: 'hotSpot',
+    component: hotSpot
   }
 ]
 export const asyncRouterMap = [

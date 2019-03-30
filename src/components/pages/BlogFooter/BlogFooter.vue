@@ -30,6 +30,7 @@ export default {
     .footer-container{
       display: flex;
       height: @footer-height;
+      padding: 0;
       .info{
         flex: 1;
         line-height: @footer-height;
@@ -42,7 +43,8 @@ export default {
       .connect-me-wrapper{
         flex: 1;
         line-height: @footer-height;
-        flex-basis: 35%;
+        margin-left: 20px;
+        flex-basis: 40%;
         .connect-me{
           color: #333;
           display: inline-block;

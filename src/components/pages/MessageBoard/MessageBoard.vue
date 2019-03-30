@@ -339,16 +339,6 @@ export default {
       position: relative;
       height: 200px;
       overflow-y: scroll;
-      &:after{
-        content: "";
-        width: 100%;
-        height: 10px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        z-index: 1;
-        box-shadow: inset 0 -5px 8px #fff;
-      }
     }
     .history-message-list{
       margin: 10px 0;

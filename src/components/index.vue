@@ -1,7 +1,7 @@
 <template>
   <div>
     <blog-header @searchArticlesByKey="searchArticlesByKey" />
-    <div class="main-container">
+    <div class="main-container ">
       <div class="canvas-wrapper">
         <div class="joke">
           ——上帝向人间洒满智慧，而我却打起了伞
@@ -19,7 +19,7 @@
                   <i class="icon iconfont icon-yonghutouxiang"></i> {{article.author}}
                 </span>
                 <span class="blog-info-item" v-if="article.createTime">
-                  <i class="icon iconfont icon-rili1"></i> {{getFormatDate(article.createTime)}}
+                  <i class="icon iconfont icon-rili1"></i> {{getFormatCN(article.createTime)}}
                 </span>
                 <span class="blog-info-item">
                   <i class="icon iconfont icon-biaoqian"></i> {{getCategoriesList(article.categories)}}
@@ -91,7 +91,7 @@
 
 <script>
 import canvas from '@/common/js/rain'
-import {getFormatDate} from '@/utils/formatData'
+import {getFormatCN} from '@/utils/formatData'
 import {getQuotes} from '@/utils/randomGenerate'
 import blogFooter from './pages/BlogFooter/BlogFooter'
 import blogHeader from './pages/BlogHeader/BlogHeader'
@@ -182,8 +182,8 @@ export default {
     getCategoriesList (Categories) {
       return Categories.split(',').join('   ')
     },
-    getFormatDate (time) {
-      return getFormatDate(time)
+    getFormatCN (time) {
+      return getFormatCN(time)
     },
     openMenu () {
       this.isOpenMenu = true
@@ -197,6 +197,9 @@ export default {
 
 <style scoped lang="less">
   @import '../common/css/theme';
+  .main-container{
+    margin-top: 20px;
+  }
   .blog-container{
     display: flex;
     justify-content:space-between;
@@ -207,13 +210,7 @@ export default {
       flex-basis: 65%;
       position: relative;
       .blog-list{
-        border-top: 1px dashed @border-color;
-        border-bottom: 1px dashed @border-color;
         .blog-item{
-          padding: 20px 0 15px;
-          &:not(:last-child) {
-            border-bottom: 1px dashed @border-color;
-          }
           .blog-title{
             display: block;
             font-size: 18px;
@@ -227,7 +224,8 @@ export default {
           }
           .blog-summary{
             color: #777;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            line-height: 1.75;
           }
           .blog-info{
             font-size: 12px;
