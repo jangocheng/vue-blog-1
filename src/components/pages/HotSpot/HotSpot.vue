@@ -2,11 +2,12 @@
   <div>
     <blog-header/>
     <div class="main-container hot-spot-container">
+      <hot-header></hot-header>
       <ul class="hot-article-list">
         <li class="hot-article-item" v-for="(article, index) in articleList" :key="article.id">
           <p class="order">{{orderNum(index)}}</p>
           <div class="hot-article-card">
-            <div class="hot-article-title">{{article.articleTitle}}</div>
+            <div class="hot-article-title" @click="toArticleContentPage(article.articleId, article.author)">{{article.articleTitle}}</div>
             <div class="hot-article-info">
               <span class="info-item">
                 <i class="icon iconfont icon-rili1"></i> {{getFormatCN(article.createTime)}}
@@ -28,11 +29,13 @@
 
 <script>
 import blogHeader from '../../pages/BlogHeader/BlogHeader'
+import hotHeader from './HotHeader'
 import {getFormatCN} from '@/utils/formatData'
 export default {
   name: 'hot-spot',
   components: {
-    blogHeader
+    blogHeader,
+    hotHeader
   },
   data () {
     return {
@@ -52,6 +55,9 @@ export default {
     }
   },
   methods: {
+    toArticleContentPage (articleId, author) {
+      this.$router.push({name: 'articleContent', query: { articleId: articleId, author: author }})
+    },
     orderNum (index) {
       if (this.articleList.length > 0) {
         return `TOP ${index + 1}`
