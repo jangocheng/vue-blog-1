@@ -15,7 +15,7 @@ module.exports = {
         target: 'http://localhost:8092/blog',  //后端请求服务域名和端口
         changeOrigin: true,   //设置请求头
         pathRewrite: {
-          '^/blog': ''   //路径重写  前端/flask-api 对应 后端''
+          '^/blog': ''   //路径重写  前端/blog 对应 后端''
         },
       }
     },

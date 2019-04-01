@@ -66,11 +66,15 @@
 
 #### 文章阅读界面
 
-<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/article.png" width="400" height="250"/>
+<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/article.png" width="500" height="250"/>
+
+#### 首页
+
+<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/index.png" width="500" height="250"/>
 
 #### 登录界面
 
-<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/login.png" width="400" height="250"/>
+<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/login.png" width="500" height="250"/>
 
 
 
@@ -88,4 +92,46 @@ npm run dev
 npm run build
 
 ```
+
+## 开发注意事项（webpack的个人配置）
+
+在config > index.js （第13行） 修改代理
+
+```
+proxyTable: {
+      '/blog': {//前端路由匹配模式
+        target: 'http://localhost:8092/blog',  //后端请求服务域名和端口
+        changeOrigin: true,   //设置请求头
+        pathRewrite: {
+          '^/blog': ''   //路径重写  前端/blog 对应 后端''
+        },
+      }
+    },
+
+```
+在build > utils.js (第51行) 修改打包时的静态资源路径
+
+```
+      return ExtractTextPlugin.extract({
+        use: loaders,
+        fallback: 'vue-style-loader',
+        publicPath: '../../'
+      })
+```
+
+上述配置根据个人实际情况修改
+
+
+
+## 开发注意事项
+
+
+
+## 后续待开发的功能
+
+- ABOUT ME 页面
+- 对文章的删除和更新功能
+- 对写文章的在线保存
+- ...
+
 
