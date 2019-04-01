@@ -1,8 +1,9 @@
 # remango-blog
 
-个人的博客平台。实现了在线写文章、根据关键词搜索、按标签搜索、按热度搜索等功能。前端项目运行需要相应的后台的支持。
+搭建一个可动态发布博客的单页面应用。实现了在线写文章、根据关键词搜索、按标签搜索、按热度搜索等功能，前端框架vue，后端框架spring boot。
+前端项目运行需要相应的后台的支持。
 
-##演示地址
+## 演示地址
 
 [个人blog站点](http://120.78.222.63/blog/#/index)
 
@@ -10,26 +11,7 @@
 
 前端： vue2 + vuex + vue-router + element ui + webpack + ES6/7 + less + flex
 
-
-
-```
-git clone https://github.com/REmango/spring-boot-vue-blog.git
-
-cd spring-boot-vue-blog
-
-# 安装依赖
-npm install
-
-# 启动
-npm run dev
-
-# 前端打包
-npm run build
-
-```
-
-
-# Layout
+## 目录结构
 
 ```
 .
@@ -80,20 +62,30 @@ npm run build
 ```
 
 
-# 截图
+## 部分截图
 
-### 主页
+#### 文章阅读界面
 
-<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/index.png" width="400" height="300"/>
+<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/article.png" width="400" height="250"/>
 
-### 文章阅读界面
+#### 登录界面
 
-<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/article.png" width="400" height="300"/>
+<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/login.png" width="400" height="250"/>
 
-### 登录界面
 
-<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/login.png" width="400" height="300"/>
 
-### 写文章界面
+## 开发
 
-<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/write.png" width="400" height="300"/>
+```
+git clone https://github.com/REmango/spring-boot-vue-blog.git
+
+cd spring-boot-vue-blog
+
+npm install
+
+npm run dev
+
+npm run build
+
+```
+
