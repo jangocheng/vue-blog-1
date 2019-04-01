@@ -1,13 +1,15 @@
 # remango-blog
 
-个人的博客平台
+个人的博客平台。实现了在线写文章、根据关键词搜索、按标签搜索、按热度搜索等功能。前端项目运行需要相应的后台的支持。
 
+##演示地址
+
+[个人blog站点](http://120.78.222.63/blog/#/index)
 
 ## 主要技术栈
 
 前端： vue2 + vuex + vue-router + element ui + webpack + ES6/7 + less + flex
 
-## Development
 
 
 ```
@@ -53,7 +55,7 @@ npm run build
 │   │       ├── TimeLine                        // 时间轴
 │   │       └── WriteArticle                    // 写博客界面
 │   ├── router
-│   │     └── index                             // 无权限路由
+│   │     └── index                             // 路由管理
 │   ├── store
 │   │     ├── modules                           // 模块
 │   │     │     ├── permission                  // 根据用户权限去添加相应路由（待用）
@@ -80,18 +82,18 @@ npm run build
 
 # 截图
 
-### accounts page
+### 主页
 
-<img src="https://github.com/EsecuBit/EsecuBit-chrome-wallet/blob/master/screenshots/accounts.png" width="600" height="350"/>
+<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/index.png" width="400" height="300"/>
 
-### send page
+### 文章阅读界面
 
-<img src="https://github.com/EsecuBit/EsecuBit-chrome-wallet/blob/master/screenshots/send.png" width="600" height="350"/>
+<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/article.png" width="400" height="300"/>
 
-### receive page
+### 登录界面
 
-<img src="https://github.com/EsecuBit/EsecuBit-chrome-wallet/blob/master/screenshots/receive.png" width="600" height="350"/>
+<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/login.png" width="400" height="300"/>
 
-### setting page
+### 写文章界面
 
-<img src="https://github.com/EsecuBit/EsecuBit-chrome-wallet/blob/master/screenshots/setting.png" width="600" height="350"/>
+<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/write.png" width="400" height="300"/>

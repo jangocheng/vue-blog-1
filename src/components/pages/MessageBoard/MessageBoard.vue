@@ -66,7 +66,7 @@
 <script>
 import {getFormatCN} from '@/utils/formatData'
 import {getUsername} from '@/utils/randomGenerate'
-// import qs from 'qs'
+import qs from 'qs'
 export default {
   name: 'HelloWorld',
   props: {
@@ -160,17 +160,14 @@ export default {
       this.$emit('closeBoard')
     },
     submit () {
-      // let message = {
-      //   nickname: this.messageBoardForm.username,
-      //   message: this.messageBoardForm.replyMessage
-      // }
-      let formData = new FormData()
-      formData.append('nickname', this.messageBoardForm.username)
-      formData.append('message', this.messageBoardForm.replyMessage)
+      let message = {
+        nickname: this.messageBoardForm.username,
+        message: this.messageBoardForm.replyMessage
+      }
       // 验证表单以及上传文章
       this.$refs['messageBoardForm'].validate((valid) => {
         if (valid) {
-          this.axios.post(this.saveMessageBoardUrl, formData).then(response => {
+          this.axios.post(this.saveMessageBoardUrl, qs.stringify(message), {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(response => {
             if (response.data.errorCode === 0) {
               this.messageBoardForm.username = ''
               this.messageBoardForm.replyMessage = ''
