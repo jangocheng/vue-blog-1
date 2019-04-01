@@ -1,12 +1,11 @@
 # remango-blog
 
-> Remango 的blog平台
+个人的博客平台
 
-## Build Setup
 
-## Main technology
+## 主要技术栈
 
-vue2 + vuex + vue-router + element ui + webpack + ES6/7 + less + flex
+前端： vue2 + vuex + vue-router + element ui + webpack + ES6/7 + less + flex
 
 ## Development
 
@@ -16,13 +15,13 @@ git clone https://github.com/REmango/spring-boot-vue-blog.git
 
 cd spring-boot-vue-blog
 
-# install dependencies
+# 安装依赖
 npm install
 
-# serve at localhost:8080
+# 启动
 npm run dev
 
-# build for chrome app package
+# 前端打包
 npm run build
 
 ```
@@ -77,3 +76,22 @@ npm run build
 
 
 ```
+
+
+# 截图
+
+### accounts page
+
+<img src="https://github.com/EsecuBit/EsecuBit-chrome-wallet/blob/master/screenshots/accounts.png" width="600" height="350"/>
+
+### send page
+
+<img src="https://github.com/EsecuBit/EsecuBit-chrome-wallet/blob/master/screenshots/send.png" width="600" height="350"/>
+
+### receive page
+
+<img src="https://github.com/EsecuBit/EsecuBit-chrome-wallet/blob/master/screenshots/receive.png" width="600" height="350"/>
+
+### setting page
+
+<img src="https://github.com/EsecuBit/EsecuBit-chrome-wallet/blob/master/screenshots/setting.png" width="600" height="350"/>
