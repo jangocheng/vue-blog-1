@@ -47,6 +47,7 @@ export const constantRouterMap = [
     component: hotSpot
   }
 ]
+// 用作动态添加路由
 export const asyncRouterMap = [
   {
     path: '*',

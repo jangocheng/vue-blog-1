@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import qs from 'qs'
+// import qs from 'qs'
 import utils from '@/utils/utils'
 import { mapState } from 'vuex'
 export default {
@@ -112,14 +112,11 @@ export default {
       }, 5000)
     },
     initMarkdown () {
-      if (editormd) {
-        console.log('123')
-      } else { console.log('324') }
       this.markdownObj = editormd('my-editormd', { // 注意1：这里的就是上面的DIV的id属性值
         width: '100%',
         height: 740,
         syncScrolling: true, // 设置双向滚动
-        placeholder: '记录下你的灵感',
+        placeholder: '记录你的灵感',
         path: './static/markdown/lib/', // lib目录的路径
         previewTheme: 'dark', // 代码块使用dark主题
         codeFold: true,
@@ -168,20 +165,26 @@ export default {
     finishedPublishArticle (formName) {
       let summary = this.getSummary(this.markdownObj.getHTML())
       let categories = this.articleInfoForm.checkedTags.join(',')
-      let ArticleData = {
-        author: this.articleInfoForm.author,
-        articleTitle: this.articleTitle,
-        type: this.articleInfoForm.articleType,
-        categories: categories,
-        content: this.$refs.markdownContent.innerText,
-        summary: summary
-      }
-      console.log(ArticleData)
+      // let ArticleData = {
+      //   author: this.articleInfoForm.author,
+      //   articleTitle: this.articleTitle,
+      //   type: this.articleInfoForm.articleType,
+      //   categories: categories,
+      //   content: this.$refs.markdownContent.innerText,
+      //   summary: summary
+      // }
+      // console.log(ArticleData)
+      let formData = new FormData()
+      formData.append('author', this.articleInfoForm.author)
+      formData.append('articleTitle', this.articleTitle)
+      formData.append('type', this.articleInfoForm.articleType)
+      formData.append('categories', categories)
+      formData.append('content', this.$refs.markdownContent.innerText)
+      formData.append('summary', summary)
       // 验证表单以及上传文章
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.axios.post(this.publishArticleUrl, qs.stringify(ArticleData),
-            {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(response => {
+          this.axios.post(this.publishArticleUrl, formData).then(response => {
             // 重置表单
             this.articleTitle = ''
             this.resetForm('articleInfoForm')
@@ -220,7 +223,7 @@ export default {
 
         html = html.substring(endIndex + 1)
         beginIndex = html.indexOf('<')
-        if (summary.length < 100) {
+        if (summary.length < 70) {
           // 过滤掉<pre>标签中的代码块
           if (html.length > 4) {
             if (html.charAt(beginIndex) === '<' && html.charAt(beginIndex + 1) === 'p' && html.charAt(beginIndex + 2) === 'r' && html.charAt(beginIndex + 3) === 'e') {
@@ -307,6 +310,8 @@ export default {
       outline: 0;
     }
   }
+
+  /*覆盖placeholder*/
   ::-webkit-input-placeholder{
     color:#a1a1a1;
     font-weight: 400;

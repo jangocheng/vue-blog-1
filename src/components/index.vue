@@ -255,6 +255,7 @@ export default {
       }
     }
   }
+  /*canva样式*/
   .canvas-wrapper{
     position: relative;
     .umbrella {
@@ -283,9 +284,11 @@ export default {
       z-index: 2;
     }
   }
+
   .blog-pagination{
     margin: 40px 0;
   }
+
   .sidebar-tags{
     .tags-list{
       display: flex;
@@ -309,6 +312,8 @@ export default {
       }
     }
   }
+
+  /*侧边栏*/
   .sidebar {
     position: fixed;
     height: 100%;

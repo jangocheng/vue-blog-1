@@ -1,27 +1,79 @@
 # remango-blog
 
-> A Vue.js project
+> Remango 的blog平台
 
 ## Build Setup
 
-``` bash
+## Main technology
+
+vue2 + vuex + vue-router + element ui + webpack + ES6/7 + less + flex
+
+## Development
+
+
+```
+git clone https://github.com/REmango/spring-boot-vue-blog.git
+
+cd spring-boot-vue-blog
+
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# serve at localhost:8080
 npm run dev
 
-# build for production with minification
+# build for chrome app package
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+# Layout
+
+```
+.
+├── build                                       // webpack config file
+├── config                                      // webpack config file
+├── screenshots                                 // 截图
+├── src
+│   ├── common                                  // 公共资源
+│   │   ├── css                                 // css files
+│   │   ├── fonts                               // 主要为iconfont图标
+│   │   ├── img                                 // 图片
+│   │   └── js                                  // js 文件
+│   ├── components                              //
+│   │   ├── index                               // 博客首页
+│   │   └── pages                               // includes eos components
+│   │       ├── 404                             // 404页面
+│   │       ├── ArticleContent                  // 写文章页面
+│   │       ├── BlogFooter                      // 首页页脚
+│   │       ├── BlogHeader                      // 博客导航栏
+│   │       ├── HotSpot                         // 热点页面
+│   │       ├── Login                           // 登录页面
+│   │       ├── MessageBoard                    // 留言板
+│   │       ├── TimeLine                        // 时间轴
+│   │       └── WriteArticle                    // 写博客界面
+│   ├── router
+│   │     └── index                             // 无权限路由
+│   ├── store
+│   │     ├── modules                           // 模块
+│   │     │     ├── permission                  // 根据用户权限去添加相应路由（待用）
+│   │     │     └── user                        // 用户常用登入登出操作
+│   │     │
+│   │     ├── actions                           // actions
+│   │     ├── getters                           // getters
+│   │     ├── index                             // index
+│   │     └── mutations                         // mutations
+│   ├── utils                                   // 工具库
+│   ├── App.vue
+│   └── main.js
+├──  static                                     // static resource
+├── .eslintignore                               // eslint ignore config
+├── .eslintrc.js                                // eslint config file
+├── .gitignore                                  // git ignore config
+├── index.html                                  // entry page html file
+├── package.json                                // package.json
+.
+
+
+```
