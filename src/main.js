@@ -22,6 +22,7 @@ Vue.config.productionTip = false
 // 动态添加路由
 store.commit('SET_ROUTERS', asyncRouterMap)
 router.addRoutes(store.getters.addRouters)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

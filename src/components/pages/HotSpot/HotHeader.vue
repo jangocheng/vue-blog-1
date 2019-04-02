@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'active': isActive}" class="title-container">
+  <div class="title-container" :class="{'enter-animation-active': isActive}">
     <div class="main-title">
       <div class="js-title">Hot</div>
       <div class="content-title">Do you like ...</div>
@@ -16,14 +16,12 @@ export default {
     }
   },
   mounted () {
-    setTimeout(() => {
-      this.isActive = true
-    }, 300)
+    this.isActive = true
   }
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
   .title-container{
     margin-bottom: 40px;
   }
@@ -65,7 +63,7 @@ export default {
       opacity: 0;
     }
   }
-  .active {
+  .enter-animation-active {
     .main-title {
       .js-title{
         transform: scale(1, 1);
@@ -75,8 +73,8 @@ export default {
         animation: bounceIn .8s .5s ease-out;
       }
       .content-title{
-        transition: 1.5s 1.3s ease-out;
-        -webkit-transition: 1.5s 1.3s ease-out;
+        transition: .5s 1.3s ease-out;
+        -webkit-transition: .5s 1.3s ease-out;
         transform: translateX(0);
         -webkit-transform: translateX(0);
         opacity: 1;

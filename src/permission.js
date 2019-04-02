@@ -5,6 +5,7 @@ import 'nprogress/nprogress.css'// Progress 进度条样式
 import { getToken } from '@/utils/auth'
 
 const whiteList = ['/login', '/index', '/writeArticle', '/articleContent', '/timeLine', '/hotSpot', '/pageNoFound'] // 不重定向白名单
+
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (whiteList.indexOf(to.path) !== -1) {

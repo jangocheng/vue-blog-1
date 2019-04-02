@@ -2,67 +2,69 @@
   <div>
     <blog-header @searchArticlesByKey="searchArticlesByKey" />
     <div class="main-container ">
-      <div class="canvas-wrapper">
-        <div class="joke">
-          ——上帝向人间洒满智慧，而我却打起了伞
+      <div class="index-page-container" :class="{'enter-animation-active': isActive}">
+        <div class="canvas-wrapper">
+          <div class="joke">
+            ——上帝向人间洒满智慧，而我却打起了伞
+          </div>
+          <img class="umbrella" src="@/common/img/umbrella.png"/>
+          <canvas id="canvas" class="canvas" height="200" width="960"></canvas>
         </div>
-        <img class="umbrella" src="@/common/img/umbrella.png"/>
-        <canvas id="canvas" class="canvas" height="200" width="960"></canvas>
-      </div>
-      <div class="blog-container">
-        <div class="blog-content-wrapper" >
-          <ul class="blog-list" v-if="articlesList.length > 0">
-            <li class="blog-item" v-for="article in articlesList" :key="article.id">
-              <a class="blog-title" @click="toArticleContentPage(article.articleId, article.author)">{{article.articleTitle}}</a>
-              <div class="blog-info">
+        <div class="blog-container">
+          <div class="blog-content-wrapper" >
+            <ul class="blog-list" v-if="articlesList.length > 0">
+              <li class="blog-item" v-for="article in articlesList" :key="article.id">
+                <a class="blog-title" @click="toArticleContentPage(article.articleId, article.author)">{{article.articleTitle}}</a>
+                <div class="blog-info">
                 <span class="blog-info-item">
                   <i class="icon iconfont icon-yonghutouxiang"></i> {{article.author}}
                 </span>
-                <span class="blog-info-item" v-if="article.createTime">
+                  <span class="blog-info-item" v-if="article.createTime">
                   <i class="icon iconfont icon-rili1"></i> {{getFormatCN(article.createTime)}}
                 </span>
-                <span class="blog-info-item">
+                  <span class="blog-info-item">
                   <i class="icon iconfont icon-biaoqian"></i> {{getCategoriesList(article.categories)}}
                 </span>
+                </div>
+                <p class="blog-summary">{{article.summary + '...'}}
+                </p>
+              </li>
+            </ul>
+            <div v-else>{{searchMsg}}</div>
+          </div>
+          <div class="blog-sidebar-wrapper">
+            <el-card class="box-card" shadow="never">
+              <div slot="header" class="clearfix">
+                <span>常用标签</span>
               </div>
-              <p class="blog-summary">{{article.summary + '...'}}
-              </p>
-            </li>
-          </ul>
-          <div v-else>{{searchMsg}}</div>
+              <div class="sidebar-tags">
+                <ul class="tags-list">
+                  <li class="tags-item" v-for="item in tags" :key="item.label">
+                    <div class="tags-link-wrapper"><a class="tags-link" @click="getArticle(item.label)"><i class="icon iconfont" :class="item.icon"></i><span>{{item.label}}</span></a></div>
+                  </li>
+                </ul>
+              </div>
+            </el-card>
+            <el-card class="box-card" shadow="never">
+              <div slot="header" class="clearfix">
+                <span>今日份鸡汤</span>
+              </div>
+              <div class="quote">
+                {{getQuotes}}
+              </div>
+            </el-card>
+          </div>
         </div>
-        <div class="blog-sidebar-wrapper">
-          <el-card class="box-card" shadow="never">
-            <div slot="header" class="clearfix">
-              <span>常用标签</span>
-            </div>
-            <div class="sidebar-tags">
-              <ul class="tags-list">
-                <li class="tags-item" v-for="item in tags" :key="item.label">
-                  <div class="tags-link-wrapper"><a class="tags-link" @click="getArticle(item.label)"><i class="icon iconfont" :class="item.icon"></i><span>{{item.label}}</span></a></div>
-                </li>
-              </ul>
-            </div>
-          </el-card>
-          <el-card class="box-card" shadow="never">
-            <div slot="header" class="clearfix">
-              <span>今日份鸡汤</span>
-            </div>
-            <div class="quote">
-              {{getQuotes}}
-            </div>
-          </el-card>
+        <div class="blog-pagination">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pagination.currentPage"
+            :page-size="pagination.pageSize"
+            layout="prev, pager, next, total"
+            :total="pagination.total">
+          </el-pagination>
         </div>
-      </div>
-      <div class="blog-pagination">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pagination.currentPage"
-          :page-size="pagination.pageSize"
-          layout="prev, pager, next, total"
-          :total="pagination.total">
-        </el-pagination>
       </div>
     </div>
     <div class="sidebar-container" :class="{'open': isOpenMenu}">
@@ -104,6 +106,7 @@ export default {
   },
   data () {
     return {
+      isActive: false,
       pagination: {
         currentPage: 1,
         pageSize: 10,
@@ -132,6 +135,7 @@ export default {
   },
   mounted () {
     canvas()
+    this.isActive = true
     this.getArticle()
   },
   methods: {
@@ -199,6 +203,18 @@ export default {
   @import '../common/css/theme';
   .main-container{
     margin-top: 20px;
+  }
+  .index-page-container{
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(50px);
+    transition: .8s;
+    -webkit-transition: .8s;
+  }
+  .enter-animation-active{
+    opacity: 1;
+    visibility: visible;
+    -webkit-transform: translateY(0);
   }
   .blog-container{
     display: flex;

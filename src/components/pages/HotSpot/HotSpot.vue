@@ -1,9 +1,9 @@
 <template>
   <div>
     <blog-header/>
-    <div class="main-container hot-spot-container">
+    <div class="main-container">
       <hot-header></hot-header>
-      <ul class="hot-article-list">
+      <ul class="hot-article-list hot-spot-container" :class="{'enter-animation-active': isActive}">
         <li class="hot-article-item" v-for="(article, index) in articleList" :key="article.id">
           <p class="order">{{orderNum(index)}}</p>
           <div class="hot-article-card">
@@ -19,10 +19,10 @@
             <div class="hot-article-summary">{{article.summary}}</div>
           </div>
         </li>
+        <div class="read-more-wrapper">
+          <el-button type="info" @click="loadMoreArticle" v-if="isShowArticleReadMore">阅读更多</el-button>
+        </div>
       </ul>
-      <div class="read-more-wrapper">
-        <el-button type="info" @click="loadMoreArticle" v-if="isShowArticleReadMore">阅读更多</el-button>
-      </div>
     </div>
   </div>
 </template>
@@ -39,6 +39,7 @@ export default {
   },
   data () {
     return {
+      isActive: false,
       total: 0,
       currentPage: 1,
       pageSize: 5,
@@ -47,6 +48,7 @@ export default {
     }
   },
   mounted () {
+    this.isActive = true
     this.loadArticles()
   },
   computed: {
@@ -92,8 +94,22 @@ export default {
 </script>
 
 <style scoped lang="less">
-  .hot-spot-container{
+  .main-container{
     margin-top: 30px;
+    overflow: hidden;
+  }
+  .hot-spot-container{
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transform: translateY(50px);
+    transition: .8s;
+    -webkit-transition: .8s;
+  }
+  .enter-animation-active{
+    visibility: visible;
+    opacity: 1;
+    -webkit-transform: translateY(0);
   }
   .hot-article-list{
     .hot-article-item{

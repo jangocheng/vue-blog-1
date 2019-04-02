@@ -1,8 +1,8 @@
 <template>
   <div>
     <blog-header/>
-    <div class="main-container time-line-container">
-      <div class="time-line-content">
+    <div class="main-container time-line-container" >
+      <div class="time-line-content" :class="{'enter-animation-active': isActive}">
         <div class="time-line-tags">
           <div class="time-tags-title">足迹</div>
           <div class="time-tags-content">
@@ -51,6 +51,7 @@ export default {
   },
   data () {
     return {
+      isActive: false,
       getTimeLineUrl: '/blog/getTimeline',
       queryArticleListByTimeLineUrl: '/blog/queryArticleListByTimeLine',
       timeLineTotal: 0,
@@ -82,6 +83,7 @@ export default {
     }
   },
   mounted () {
+    this.isActive = true
     this.loadTimeLine()
   },
   methods: {
@@ -183,6 +185,11 @@ export default {
   }
   .time-line-content{
     display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(50px);
+    transition: .8s;
+    -webkit-transition: .8s;
     .time-line-tags{
       flex: 1;
       width: 150px;
@@ -267,5 +274,10 @@ export default {
         padding-left: 30px;
       }
     }
+  }
+  .enter-animation-active{
+    visibility: visible;
+    opacity: 1;
+    -webkit-transform: translateY(0);
   }
 </style>
