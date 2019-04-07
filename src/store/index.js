@@ -12,6 +12,7 @@ const state = {
   tags: [
     {label: 'Java', icon: 'icon-java'},
     {label: 'JavaScript', icon: 'icon-logo-javascript'},
+    {label: 'CSS', icon: 'icon-css'},
     {label: 'VUE', icon: 'icon-bxl-vuejs'},
     {label: 'REACT', icon: 'icon-react'},
     {label: 'Database', icon: 'icon-data-base'},
