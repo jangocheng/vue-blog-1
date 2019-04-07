@@ -7,6 +7,10 @@
 
 [个人blog站点](http://120.78.222.63/blog/#/index)
 
+## 后端代码地址
+
+[后端代码导航](https://github.com/REmango/spring-boot-blog)
+
 ## 主要技术栈
 
 前端： vue2 + vuex + vue-router + element ui + webpack + ES6/7 + less + flex
@@ -66,24 +70,24 @@
 
 #### 文章阅读界面
 
-<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/article.png" width="500" height="250"/>
+<img src="https://github.com/REmango/vue-blog/blob/master/screenshot/article.png" width="500" height="250"/>
 
 #### 首页
 
-<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/index.png" width="500" height="250"/>
+<img src="https://github.com/REmango/vue-blog/blob/master/screenshot/index.png" width="500" height="250"/>
 
 #### 登录界面
 
-<img src="https://github.com/REmango/spring-boot-vue-blog/blob/master/screenshot/login.png" width="500" height="250"/>
+<img src="https://github.com/REmango/vue-blog/blob/master/screenshot/login.png" width="500" height="250"/>
 
 
 
 ## 开发
 
 ```
-git clone https://github.com/REmango/spring-boot-vue-blog.git
+git clone https://github.com/REmango/vue-blog.git
 
-cd spring-boot-vue-blog
+cd vue-blog
 
 npm install
 
